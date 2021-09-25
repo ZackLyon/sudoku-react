@@ -1,25 +1,72 @@
-import logo from './logo.svg';
 import './App.css';
+import Boxes from './Boxes-x-3'
+import React, { Component } from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends Component {
+  // state = {
+  //   columnsRemaining:
+  //   [{
+  //     id: 1,
+  //     left: [0,1,2],
+  //     middle: [3,4,5],
+  //     right: [6,7,8]
+  //   },
+  //    {
+  //     id: 2,
+  //     left: [0,1,2],
+  //     middle: [3,4,5],
+  //     right: [6,7,8]
+  //   },
+  //   {
+  //     id: 3,
+  //     left: [0,1,2],
+  //     middle: [3,4,5],
+  //     right: [6,7,8]
+  //   },
+  //   {
+  //     id: 4,
+  //     left: [0,1,2],
+  //     middle: [3,4,5],
+  //     right: [6,7,8]
+  //   },
+  //   {
+  //     id: 5,
+  //     left: [0,1,2],
+  //     middle: [3,4,5],
+  //     right: [6,7,8]
+  //   },
+  //   {
+  //     id: 6,
+  //     left: [0,1,2],
+  //     middle: [3,4,5],
+  //     right: [6,7,8]
+  //   },
+  //   {
+  //     id: 7,
+  //     left: [0,1,2],
+  //     middle: [3,4,5],
+  //     right: [6,7,8]
+  //   },
+  //   {
+  //     id: 8,
+  //     left: [0,1,2],
+  //     middle: [3,4,5],
+  //     right: [6,7,8]
+  //   },
+  //   {
+  //     id: 9,
+  //     left: [0,1,2],
+  //     middle: [3,4,5],
+  //     right: [6,7,8]
+  //   }]
+  // }
+
+  render() {
+    return (
+      <div>
+        <Boxes />
+      </div>
+    )
+  }
 }
 
-export default App;
