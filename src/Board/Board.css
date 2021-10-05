@@ -2,17 +2,18 @@
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
+    z-index: 3;
 }
 
 .digit {
     /* margin: .2vw; */
     background-color: rgb(245, 203, 203);
-    width: 8vw;
-    height: 8vw;
+    width: 8vh;
+    height: 8vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 4vw;
+    font-size: 6vh;
     border: .1vw solid black;
 }
 
@@ -62,9 +63,22 @@
 
 .board-container {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100vw;
     height: 100vh;
     background-color: black;
+}
+
+.win-message {
+    /* needs work */
+    position: absolute;
+    text-align: center;
+    font-size: 17vh;
+    padding: 2vw;
+    color: rgb(237, 68, 68);
+    font-weight: bold;
+    z-index: 10;
+    background-color: rgba(255, 255, 255, 0.694);
 }

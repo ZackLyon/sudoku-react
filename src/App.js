@@ -9,7 +9,8 @@ export default class App extends Component {
   state = {
     board: [],
     correct: [],
-    isLoading: false
+    isLoading: false,
+    won: false
   }
 
 // example board entry object: {number: 1, showing: true};
@@ -55,10 +56,12 @@ export default class App extends Component {
     updateCorrectArr[index] = isItCorrect;
     await this.setState({correct: updateCorrectArr});
     console.log("index ", index);
-    console.log("index of answers ", updateCorrectArr);
+    // console.log("index of answers ", updateCorrectArr);
 
     if (!updateCorrectArr.includes(false)) {
       console.log("YOU WIN!!!")
+      await this.setState({won: true});
+
     }
   }
 
@@ -68,7 +71,7 @@ export default class App extends Component {
       <div className = "board-container">
         <div className="board">
           {
-            this.setState.isLoading === true 
+            this.state.isLoading === true 
             ? <div>LOADING</div>
             : 
             this.state.board.map(({ number, showing }, index) => 
@@ -84,6 +87,16 @@ export default class App extends Component {
             )
           }
         </div>
+
+
+        {
+            this.state.won === true 
+            ? <div className="win-message">YOU WIN</div>
+            : false
+          
+          }
+
+
       </div>
     )
   }
