@@ -1,4 +1,4 @@
-import { makeBoard } from '../Boxes-utils.js';
+import { makeBoard } from './box-utils.js';
 const clone = require('rfdc')();
 
 const fetchBoard = ({ setSolutionBoard, setShowingBoard }) => {
@@ -11,6 +11,7 @@ const fetchBoard = ({ setSolutionBoard, setShowingBoard }) => {
 
   setSolutionBoard(newBoard);
   setShowingBoard(showingBoard);
+  return newBoard;
 };
 
 const makeCorrectArr = ({ solutionBoard, setCorrect }) => {

@@ -1,4 +1,4 @@
-import { makeBoard } from './Boxes-utils.js';
+import { makeBoard } from './box-utils.js';
 
 const board = makeBoard();
 const boardArr = board.map(({ number }) => number);

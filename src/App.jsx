@@ -1,6 +1,6 @@
 import './App.css';
 import React, { Component } from 'react';
-import { makeBoard } from './utils/Boxes-utils.js';
+import { makeBoard } from './utils/box-utils.js';
 import Digit from './Board/Digit.js';
 import Input from './Input.js';
 import './Board/Board.css';
@@ -120,12 +120,13 @@ export default class App extends Component {
           ) : (
             this.state.showingBoard.map(({ number, prefilled }, index) =>
               prefilled === true ? (
-                <Digit value={number} index={index} />
+                <Digit value={number} index={index} key={index} />
               ) : (
                 <Input
                   // onChange={(e) => this.handleChange(index, number, e)}
                   number={number}
                   index={index}
+                  key={index}
                   numberButton={this.state.numberButton}
                   onFocus={(e) => this.handleFocus(index, number, e)}
                   selectedTile={this.state.tileSelected}
@@ -142,33 +143,11 @@ export default class App extends Component {
         )}
 
         <div className='number-buttons'>
-          <button value='1' onClick={this.handleNumber}>
-            1
-          </button>
-          <button value='2' onClick={this.handleNumber}>
-            2
-          </button>
-          <button value='3' onClick={this.handleNumber}>
-            3
-          </button>
-          <button value='4' onClick={this.handleNumber}>
-            4
-          </button>
-          <button value='5' onClick={this.handleNumber}>
-            5
-          </button>
-          <button value='6' onClick={this.handleNumber}>
-            6
-          </button>
-          <button value='7' onClick={this.handleNumber}>
-            7
-          </button>
-          <button value='8' onClick={this.handleNumber}>
-            8
-          </button>
-          <button value='9' onClick={this.handleNumber}>
-            9
-          </button>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+            <button value={num} key={num} onClick={this.handleNumber}>
+              {num}
+            </button>
+          ))}
           <button value='0' onClick={this.handleNumber}></button>
         </div>
       </div>
