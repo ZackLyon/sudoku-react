@@ -1,6 +1,6 @@
 import './App.css';
 import React, { Component } from 'react';
-import { makeBoard } from './Boxes-utils.js';
+import { makeBoard } from './utils/Boxes-utils.js';
 import Digit from './Board/Digit.js';
 import Input from './Input.js';
 import './Board/Board.css';

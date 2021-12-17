@@ -2,88 +2,29 @@ export { makeBoard };
 
 const clone = require('rfdc')();
 
-let numbers = [
-  {
-    id: 1,
+let numbers = [];
+
+for (let i = 1; i < 10; i++) {
+  numbers.push({
+    id: i,
     boxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
     prevBoxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
     left: true,
     middle: true,
     right: true,
     usedThisRow: false,
-  },
-  {
-    id: 2,
-    boxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    prevBoxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    left: true,
-    middle: true,
-    right: true,
-    usedThisRow: false,
-  },
-  {
-    id: 3,
-    boxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    prevBoxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    left: true,
-    middle: true,
-    right: true,
-    usedThisRow: false,
-  },
-  {
-    id: 4,
-    boxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    prevBoxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    left: true,
-    middle: true,
-    right: true,
-    usedThisRow: false,
-  },
-  {
-    id: 5,
-    boxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    prevBoxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    left: true,
-    middle: true,
-    right: true,
-    usedThisRow: false,
-  },
-  {
-    id: 6,
-    boxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    prevBoxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    left: true,
-    middle: true,
-    right: true,
-    usedThisRow: false,
-  },
-  {
-    id: 7,
-    boxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    prevBoxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    left: true,
-    middle: true,
-    right: true,
-    usedThisRow: false,
-  },
-  {
-    id: 8,
-    boxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    prevBoxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    left: true,
-    middle: true,
-    right: true,
-    usedThisRow: false,
-  },
-  {
-    id: 9,
-    boxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    left: true,
-    middle: true,
-    right: true,
-    usedThisRow: false,
-  },
-];
+  });
+}
+// let numbers = [
+//   {
+//     id: 1,
+//     boxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+//     prevBoxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+//     left: true,
+//     middle: true,
+//     right: true,
+//     usedThisRow: false,
+//   },
 
 let prevNumbers = [];
 let prevBoxNumbers = [];
@@ -151,6 +92,7 @@ function makeBox() {
   let row2 = makeGoodRow();
   let row3 = makeGoodRow();
   let box = [...row1, ...row2, ...row3];
+
   for (let j = 0; j < 10; j++) {
     if (box.length < 27) {
       numbers = clone(prevBoxNumbers);
@@ -160,6 +102,7 @@ function makeBox() {
       box = [...row1, ...row2, ...row3];
     }
   }
+
   resetBoxesAvailable();
   return box;
 }
@@ -240,6 +183,7 @@ function indicesToShow(shownArr) {
       }
     }
   });
+
   return showingIndexArr;
 }
 
