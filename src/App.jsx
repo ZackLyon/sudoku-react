@@ -1,156 +1,97 @@
 import './App.css';
-import React, { Component } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { makeBoard } from './utils/box-utils.js';
-import Digit from './Board/Digit.js';
-import Input from './Input.js';
-import './Board/Board.css';
-const clone = require('rfdc')();
+import PrefilledTile from './Components/PrefilledTile.jsx';
+import GuessTile from './Components/GuessTile.jsx';
+import './Components/Board.css';
 
-export default class App extends Component {
-  state = {
-    solutionBoard: [],
-    showingBoard: [],
-    correct: [],
-    guesses: [],
-    isLoading: false,
-    won: false,
-    tileSelected: null,
-    numberButton: null,
-  };
+export default function AppHooks() {
+  const boardReducer = (board, action) => {
+    const { type, id, newBoard, guess } = action;
+    switch (type) {
+      case 'select': {
+        return board.map((tile) =>
+          tile.id === id
+            ? { ...tile, selected: true }
+            : { ...tile, selected: false }
+        );
+      }
 
-  // example board entry object: {number: 1, prefilled: true};
+      case 'update': {
+        return newBoard;
+      }
 
-  componentDidMount = async () => {
-    await this.setState({ isLoading: true });
-    await this.fetchBoard();
-    await this.makeCorrectArr();
-    await this.setState({ isLoading: false });
-  };
+      case 'guess': {
+        const updatedBoard = board.map((tile) =>
+          tile.selected ? { ...tile, guess } : tile
+        );
 
-  componentWillUnmount = async () => {
-    await this.setState({ solutionBoard: [] });
-  };
+        if (updatedBoard.every((tile) => tile.guess === tile.correct))
+          setWon(true);
 
-  makeCorrectArr = async () => {
-    const solutionBoard = await this.state.solutionBoard;
+        return updatedBoard;
+      }
 
-    //make an array of booleans that has prefilled board squares marked as true and empty squares as false that can be altered by index as squares are filled correctly
-    const correctArr = solutionBoard.map((item) => item.prefilled);
-
-    await this.setState({ correct: correctArr });
-  };
-
-  fetchBoard = async () => {
-    const newBoard = await makeBoard();
-    const newBoardClone = clone(newBoard);
-
-    //set up showing board so that squares that aren't prefilled have a value of ""
-    const showingBoard = newBoardClone.map((square) =>
-      square.prefilled === true ? square : { number: '', prefilled: false }
-    );
-
-    await this.setState({ solutionBoard: newBoard });
-    await this.setState({ showingBoard: showingBoard });
-  };
-
-  handleFocus = (index) => async (e) => {
-    //keep track of the index of the focused tile to insert number into with button
-    if (index !== this.state.tileSelected) {
-      await this.setState({ tileSelected: index, numberButton: null });
+      default:
+        throw new Error(`Action type ${type} is not allowed.`);
     }
   };
 
-  // SAVING THIS: IT HANDLES KEYBOARD INPUT
-  // handleChange =(index, number) => async(e) => {
-  //   const isItCorrect = await Number(e.target.value) === number;
-  //   console.log("number entered ", e.target.value);
-  //   console.log("correct number ", number);
-  //   console.log("is it correct? ", isItCorrect);
+  const [won, setWon] = useState(false);
+  const initialBoard = [];
+  const [board, dispatch] = useReducer(boardReducer, initialBoard);
 
-  //   const updateCorrectArr = await this.state.correct;
-  //   updateCorrectArr[index] = isItCorrect;
-  //   await this.setState({correct: updateCorrectArr});
-  //   console.log("index ", index);
-  //   // console.log("index of answers ", updateCorrectArr);
-
-  //   if (!updateCorrectArr.includes(false)) {
-  //     console.log("YOU WIN!!!")
-  //     await this.setState({won: true});
-  //   }
-  // }
-
-  handleNumber = async (e) => {
-    const buttonNumber = Number(e.target.value);
-    console.log('you pressed ', buttonNumber);
-    await this.setState({ numberButton: buttonNumber });
-
-    //change tile value to number pressed in board object clone, then push clone to showingBoard in state
-    const selectedIndex = this.state.tileSelected;
-    const showingBoardClone = clone(this.state.showingBoard);
-
-    buttonNumber === 0
-      ? (showingBoardClone[selectedIndex].number = '')
-      : (showingBoardClone[selectedIndex].number = buttonNumber);
-
-    const correctNumber = this.state.solutionBoard[selectedIndex].number;
-    console.log('correct number ', correctNumber);
-    const isItCorrect = (await buttonNumber) === correctNumber;
-    console.log('is it correct?', isItCorrect);
-    const updateCorrectArr = await this.state.correct;
-    updateCorrectArr[selectedIndex] = isItCorrect;
-    await this.setState({
-      correct: updateCorrectArr,
-      showingBoard: showingBoardClone,
+  const handleSelect = (id) => {
+    dispatch({
+      type: 'select',
+      id,
     });
-    console.log('tileSelected index ', selectedIndex);
-
-    //check for win conditions
-    if (!updateCorrectArr.includes(false)) {
-      console.log('YOU WIN!!!');
-      await this.setState({ won: true });
-    }
   };
 
-  render() {
-    return (
-      <div className='board-container'>
-        <div className='board'>
-          {this.state.isLoading === true ? (
-            <div>LOADING</div>
+  const handleGuess = (num) => {
+    dispatch({
+      type: 'guess',
+      guess: num,
+    });
+  };
+
+  const handleUpdate = (newBoard) => {
+    dispatch({
+      type: 'update',
+      newBoard,
+    });
+  };
+
+  useEffect(() => {
+    const newBoard = makeBoard();
+    handleUpdate(newBoard);
+  }, []);
+
+  return (
+    <div className='board-container'>
+      <div className='board'>
+        {board.map(({ id, correct, guess, prefilled, selected }) =>
+          prefilled === true ? (
+            <PrefilledTile correct={correct} key={id} />
           ) : (
-            this.state.showingBoard.map(({ number, prefilled }, index) =>
-              prefilled === true ? (
-                <Digit value={number} index={index} key={index} />
-              ) : (
-                <Input
-                  // onChange={(e) => this.handleChange(index, number, e)}
-                  number={number}
-                  index={index}
-                  key={index}
-                  numberButton={this.state.numberButton}
-                  onFocus={(e) => this.handleFocus(index, number, e)}
-                  selectedTile={this.state.tileSelected}
-                />
-              )
-            )
-          )}
-        </div>
-
-        {this.state.won === true ? (
-          <div className='win-message'>YOU WIN</div>
-        ) : (
-          false
+            <GuessTile
+              key={id}
+              {...{ id, selected, guess, correct, handleSelect }}
+            />
+          )
         )}
-
-        <div className='number-buttons'>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-            <button value={num} key={num} onClick={this.handleNumber}>
-              {num}
-            </button>
-          ))}
-          <button value='0' onClick={this.handleNumber}></button>
-        </div>
       </div>
-    );
-  }
+
+      {won ? <div className='win-message'>YOU WIN</div> : <></>}
+
+      <div className='number-buttons'>
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+          <button value={num} key={num} onClick={() => handleGuess(num)}>
+            {num}
+          </button>
+        ))}
+        <button value='0' onClick={() => handleGuess(null)}></button>
+      </div>
+    </div>
+  );
 }

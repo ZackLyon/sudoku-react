@@ -1,14 +1,14 @@
 import { makeBoard } from './box-utils.js';
 
 const board = makeBoard();
-const boardArr = board.map(({ number }) => number);
+const boardArr = board.map(({ correct }) => correct);
 
 const correctArr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 it('should make a board with each column containing the numbers 1 through 9', () => {
   let columnIsGood = true;
 
-  // isCorrectColumn makes an array of values in a column then checks that they include each of the numbers 1-9
+  // using recursion, isCorrectColumn makes an array of values in a column then checks that they include each of the numbers 1-9
   function isCorrectColumn(index, arr) {
     if (index > 80) {
       return arr
@@ -37,7 +37,7 @@ it('should make a board with each row containing the numbers 1 through 9', () =>
       .sort((a, b) => a - b)
       .every((item, ind) => correctArr[ind] === item);
 
-    if (!correct) rowIsGood = false;
+    if (!correct || boardArr.length < 81) rowIsGood = false;
   }
 
   expect(rowIsGood).toEqual(true);
@@ -63,7 +63,7 @@ it('should make a board with each 3x3 box section containing the numbers 1 throu
     for (let j = i; j < i + 7; j = j + 3) {
       const correct = isBoxGood(j, [], j + 19);
 
-      if (!correct) boxIsGood = false;
+      if (!correct || boardArr.length < 81) boxIsGood = false;
     }
   }
 
