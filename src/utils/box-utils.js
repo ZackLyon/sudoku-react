@@ -2,88 +2,19 @@ export { makeBoard };
 
 const clone = require('rfdc')();
 
-let numbers = [
-  {
-    id: 1,
+let numbers = [];
+
+for (let i = 1; i < 10; i++) {
+  numbers.push({
+    id: i,
     boxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
     prevBoxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
     left: true,
     middle: true,
     right: true,
     usedThisRow: false,
-  },
-  {
-    id: 2,
-    boxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    prevBoxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    left: true,
-    middle: true,
-    right: true,
-    usedThisRow: false,
-  },
-  {
-    id: 3,
-    boxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    prevBoxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    left: true,
-    middle: true,
-    right: true,
-    usedThisRow: false,
-  },
-  {
-    id: 4,
-    boxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    prevBoxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    left: true,
-    middle: true,
-    right: true,
-    usedThisRow: false,
-  },
-  {
-    id: 5,
-    boxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    prevBoxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    left: true,
-    middle: true,
-    right: true,
-    usedThisRow: false,
-  },
-  {
-    id: 6,
-    boxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    prevBoxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    left: true,
-    middle: true,
-    right: true,
-    usedThisRow: false,
-  },
-  {
-    id: 7,
-    boxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    prevBoxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    left: true,
-    middle: true,
-    right: true,
-    usedThisRow: false,
-  },
-  {
-    id: 8,
-    boxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    prevBoxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    left: true,
-    middle: true,
-    right: true,
-    usedThisRow: false,
-  },
-  {
-    id: 9,
-    boxesToFill: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    left: true,
-    middle: true,
-    right: true,
-    usedThisRow: false,
-  },
-];
+  });
+}
 
 let prevNumbers = [];
 let prevBoxNumbers = [];
@@ -107,23 +38,19 @@ function makeRow() {
       )
       .map((num) => num.id);
 
-    // if (availableNumbersForSpace.length === 0) console.log("numbers remaining for row ", numbers.filter(item => item.usedThisRow === false));
-
     const randomChoice = Math.floor(
       Math.random() * availableNumbersForSpace.length
     );
 
+    const choice = availableNumbersForSpace[randomChoice];
+
     if (availableNumbersForSpace.length > 0) {
-      row.push(availableNumbersForSpace[randomChoice]);
+      row.push(choice);
 
       //update boxesToFill array in state, so that it will no longer be an available column for chosen number (-1 because boxesToFill is 0 indexed and choices are 1-9)
-      numbers[availableNumbersForSpace[randomChoice] - 1].boxesToFill.splice(
-        i,
-        1,
-        'x'
-      );
-      numbers[availableNumbersForSpace[randomChoice] - 1][currentRow] = false;
-      numbers[availableNumbersForSpace[randomChoice] - 1].usedThisRow = true;
+      numbers[choice - 1].boxesToFill.splice(i, 1, 'x');
+      numbers[choice - 1][currentRow] = false;
+      numbers[choice - 1].usedThisRow = true;
     }
   }
   return row;
@@ -147,29 +74,34 @@ function makeGoodRow() {
 //makes 3 boxes, resets and tries again if not enough numbers in box
 function makeBox() {
   prevBoxNumbers = clone(numbers);
-  let row1 = makeGoodRow();
-  let row2 = makeGoodRow();
-  let row3 = makeGoodRow();
-  let box = [...row1, ...row2, ...row3];
+
+  let box = [];
+
   for (let j = 0; j < 10; j++) {
     if (box.length < 27) {
       numbers = clone(prevBoxNumbers);
-      row1 = makeGoodRow();
-      row2 = makeGoodRow();
-      row3 = makeGoodRow();
-      box = [...row1, ...row2, ...row3];
+
+      box = [1, 2, 3]
+        .map(() => makeGoodRow())
+        .reduce((arr, sub) => {
+          return [...arr, ...sub];
+        }, []);
     }
   }
+
   resetBoxesAvailable();
   return box;
 }
 
 //make the solution board with 3 sets of 3 boxes, reset for next time
 function makeSolution() {
-  const boxes1 = makeBox();
-  const boxes2 = makeBox();
-  const boxes3 = makeBox();
-  const solutionBoard = [...boxes1, ...boxes2, ...boxes3];
+  // const solutionBoard = [1, 2, 3];
+  const solutionBoard = [1, 2, 3]
+    .map(() => makeBox())
+    .reduce((arr, sub) => {
+      return [...arr, ...sub];
+    }, []);
+
   numbers = clone(totalReset);
   return solutionBoard;
 }
@@ -240,6 +172,7 @@ function indicesToShow(shownArr) {
       }
     }
   });
+
   return showingIndexArr;
 }
 
@@ -252,11 +185,17 @@ function makeBoard() {
 
   const board = solutionBoard.map((num, index) => {
     //determined if each space is showing by setting prefilled to true/false
+    const isPrefilled = prefilledIndexArr.includes(index);
+
     return {
-      number: num,
-      prefilled: prefilledIndexArr.includes(index),
+      id: index,
+      correct: num,
+      prefilled: isPrefilled,
+      guess: isPrefilled ? num : null,
+      selected: false,
     };
   });
+
   numbers = clone(totalReset);
   return board;
 }
