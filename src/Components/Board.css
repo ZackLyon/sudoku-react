@@ -1,91 +1,219 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@600&display=swap');
+
 :root {
-    --main-bg-color: rgb(245, 203, 203);
-    --second-color: rgb(227, 111, 91);
+  --main-bg-color: rgb(245, 203, 203);
+  --second-color: rgb(227, 111, 91);
 }
 
 * {
-    margin: 0px;
-    padding: 0px;
-    box-sizing: border-box;
-    z-index: 3;
-    font-size: 7vw;
-}
-
-.digit {
-    background-color: var(--main-bg-color);
-    width: 9vw;
-    height: 9vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: .1vw solid black;
-}
-
-.input-box {
-    text-align: center;
-    appearance: none;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0);
-    border: none;
-}
-
-.tile-selected {
-   background-color: var(--second-color);
-   text-align: center;
-    appearance: none;
-    width: 100%;
-    height: 100%;
-    border: none;
-    caret-color: transparent;
-}
-
-.board {
-    display: grid;
-    grid-template-columns: repeat(9, 1fr);
-    background-color: black;
-    border: 2vw var(--second-color) solid;
-}
-
-/* controls the vertical thick lines */
-.board :nth-child(9n+3), .board :nth-child(9n+6) {
-    border-right-width: 1vw;
-}
-
-.board :nth-child(9n+4), .board :nth-child(9n+7) {
-    border-left-width: 1vw;
-}
-
-/* controls the horizontal thick lines */
-:nth-child(n+19):nth-child(-n+27) {
-    border-bottom-width: 1vw;
-}
-
-:nth-child(n+28):nth-child(-n+36) {
-    border-top-width: 1vw;
-}
-
-:nth-child(n+46):nth-child(-n+54) {
-    border-bottom-width: 1vw;
-}
-
-:nth-child(n+55):nth-child(-n+63) {
-    border-top-width: 1vw;
+  font-family: 'Jost', monospace, sans-serif;
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  z-index: 3;
+  font-size: 7vw;
 }
 
 .board-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100vw;
-    height: 100vh;
-    background-color: black;
+  display: grid;
+  grid-template-rows: 2fr 3fr 3fr;
+  justify-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+}
+
+.tile {
+  background-color: var(--main-bg-color);
+  width: 9vw;
+  height: 9vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0.1vw solid black;
+  appearance: none;
+}
+
+.guess-tile {
+  color: var(--second-color);
+  background-color: var(--main-bg-color);
+}
+
+.tile-selected {
+  color: var(--main-bg-color);
+  background-color: var(--second-color);
+}
+
+header {
+  width: 100vw;
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.cheat-button {
+  font-size: 5vw;
+  padding: 1vw;
+  border-radius: 5vw;
+  position: relative;
+  right: 4vw;
+  cursor: pointer;
+  color: black;
+  background-color: var(--second-color);
+  border: 1vw solid var(--main-bg-color);
+}
+
+.cheat-correct {
+  box-shadow: inset 1vw 1vw rgb(166, 250, 166),
+    inset -1vw -1vw rgb(166, 250, 166);
+}
+
+.cheat-wrong {
+  box-shadow: inset 1vw 1vw red, inset -1vw -1vw red;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  background-color: black;
+  border: 2vw var(--second-color) solid;
+  width: fit-content;
+  height: fit-content;
+}
+
+/* controls the vertical thick lines */
+.board :nth-child(9n + 3),
+.board :nth-child(9n + 6) {
+  border-right-width: 1vw;
+}
+
+.board :nth-child(9n + 4),
+.board :nth-child(9n + 7) {
+  border-left-width: 1vw;
+}
+
+/* controls the horizontal thick lines */
+:nth-child(n + 19):nth-child(-n + 27) {
+  border-bottom-width: 1vw;
+}
+
+:nth-child(n + 28):nth-child(-n + 36) {
+  border-top-width: 1vw;
+}
+
+:nth-child(n + 46):nth-child(-n + 54) {
+  border-bottom-width: 1vw;
+}
+
+:nth-child(n + 55):nth-child(-n + 63) {
+  border-top-width: 1vw;
 }
 
 .win-message {
-    /* needs work */
+  /* needs work */
+  position: absolute;
+  text-align: center;
+  font-size: 17vh;
+  padding: 2vw;
+  color: rgb(237, 68, 68);
+  font-weight: bold;
+  z-index: 10;
+  background-color: rgba(255, 255, 255, 0.694);
+}
+
+.number-buttons {
+  padding-top: 4vh;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  width: fit-content;
+  height: fit-content;
+}
+
+.number-buttons > * {
+  width: 5vh;
+  height: 5vh;
+  margin: 1vh;
+  color: black;
+  background-color: var(--main-bg-color);
+  border: none;
+  border-radius: 1vh;
+  font-size: 2vh;
+  cursor: pointer;
+}
+
+@media only screen and (min-width: 768px) {
+  .cheat-button {
+    font-size: 2vw;
+    border-radius: 3vw;
+    padding: 0.5vw;
+    border: 0.5vw solid var(--main-bg-color);
+  }
+
+  .cheat-correct {
+    box-shadow: inset 0.4vw 0.4vw rgb(166, 250, 166),
+      inset -0.4vw -0.4vw rgb(166, 250, 166);
+  }
+
+  .cheat-wrong {
+    box-shadow: inset 0.4vw 0.4vw red, inset -0.4vw -0.4vw red;
+  }
+
+  .tile {
+    width: 6vh;
+    height: 6vh;
+    font-size: 4vh;
+    border: 0.1vw solid black;
+  }
+
+  .guess-tile {
+    font-size: 4vh;
+  }
+
+  .tile-selected {
+    font-size: 4vh;
+  }
+
+  .board {
+    border: 2vw rgb(227, 111, 91) solid;
+  }
+
+  /* controls the vertical thick lines */
+  .board :nth-child(9n + 3),
+  .board :nth-child(9n + 6) {
+    border-right-width: 0.5vw;
+  }
+
+  .board :nth-child(9n + 4),
+  .board :nth-child(9n + 7) {
+    border-left-width: 0.5vw;
+  }
+
+  /* controls the horizontal thick lines */
+  :nth-child(n + 19):nth-child(-n + 27) {
+    border-bottom-width: 0.5vw;
+  }
+
+  :nth-child(n + 28):nth-child(-n + 36) {
+    border-top-width: 0.5vw;
+  }
+
+  :nth-child(n + 46):nth-child(-n + 54) {
+    border-bottom-width: 0.5vw;
+  }
+
+  :nth-child(n + 55):nth-child(-n + 63) {
+    border-top-width: 0.5vw;
+  }
+
+  .board-container {
+    grid-template-rows: 1fr 3fr 1fr;
+    align-items: center;
+  }
+
+  .win-message {
     position: absolute;
+    top: 30%;
     text-align: center;
     font-size: 17vh;
     padding: 2vw;
@@ -93,101 +221,13 @@
     font-weight: bold;
     z-index: 10;
     background-color: rgba(255, 255, 255, 0.694);
-}
+  }
 
-.number-buttons {
-    padding-top: 4vh;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-}
-
-.number-buttons > * {
-    width: 5vh;
-    height: 5vh;
+  .number-buttons > * {
+    width: 6vh;
+    height: 6vh;
     margin: 1vh;
-    background-color: var(--main-bg-color);
-    border: none;
     border-radius: 1vh;
-    font-size: 2vh;
-    cursor: pointer;
-}
-
-@media only screen and (min-width: 768px) {
-
-    .digit {
-        width: 6vh;
-        height: 6vh;
-        font-size: 4vh;
-        border: .1vw solid black;
-    }
-    
-    .input-box {
-        font-size: 4vh;
-    }
-    
-    .tile-selected {
-        font-size: 4vh;
-    }
-    
-    .board {
-        border: 2vw rgb(227, 111, 91) solid;
-    }
-    
-    /* controls the vertical thick lines */
-    .board :nth-child(9n+3), .board :nth-child(9n+6) {
-        border-right-width: .5vw;
-    }
-    
-    .board :nth-child(9n+4), .board :nth-child(9n+7) {
-        border-left-width: .5vw;
-    }
-    
-    /* controls the horizontal thick lines */
-    :nth-child(n+19):nth-child(-n+27) {
-        border-bottom-width: .5vw;
-    }
-    
-    :nth-child(n+28):nth-child(-n+36) {
-        border-top-width: .5vw;
-    }
-    
-    :nth-child(n+46):nth-child(-n+54) {
-        border-bottom-width: .5vw;
-    }
-    
-    :nth-child(n+55):nth-child(-n+63) {
-        border-top-width: .5vw;
-    }
-    
-    .board-container {
-        width: 100vw;
-        height: 100vh;
-    }
-    
-    .win-message {
-        position: absolute;
-        top: 30%;
-        text-align: center;
-        font-size: 17vh;
-        padding: 2vw;
-        color: rgb(237, 68, 68);
-        font-weight: bold;
-        z-index: 10;
-        background-color: rgba(255, 255, 255, 0.694);
-    }
-    
-    .number-buttons {
-        padding-top: 4vh;
-    }
-    
-    .number-buttons > * {
-        width: 5vh;
-        height: 5vh;
-        margin: 1vh;
-        border-radius: 1vh;
-        font-size: 2vh;
-    }
-
-
-
+    font-size: 3vh;
+  }
 }

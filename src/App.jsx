@@ -3,6 +3,7 @@ import React, { useState, useEffect, useReducer } from 'react';
 import { makeBoard } from './utils/box-utils.js';
 import PrefilledTile from './Components/PrefilledTile.jsx';
 import GuessTile from './Components/GuessTile.jsx';
+import Header from './Components/Header';
 import './Components/Board.css';
 
 export default function AppHooks() {
@@ -38,6 +39,7 @@ export default function AppHooks() {
   };
 
   const [won, setWon] = useState(false);
+  const [cheatMode, setCheatMode] = useState(false);
   const initialBoard = [];
   const [board, dispatch] = useReducer(boardReducer, initialBoard);
 
@@ -69,6 +71,7 @@ export default function AppHooks() {
 
   return (
     <div className='board-container'>
+      <Header {...{ cheatMode, setCheatMode }} />
       <div className='board'>
         {board.map(({ id, correct, guess, prefilled, selected }) =>
           prefilled === true ? (
@@ -76,7 +79,7 @@ export default function AppHooks() {
           ) : (
             <GuessTile
               key={id}
-              {...{ id, selected, guess, correct, handleSelect }}
+              {...{ id, selected, guess, correct, cheatMode, handleSelect }}
             />
           )
         )}
