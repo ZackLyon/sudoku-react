@@ -5,17 +5,24 @@ export default function GuessTile({
   selected,
   guess,
   correct,
+  cheatMode,
   handleSelect,
 }) {
+  const select = selected ? 'tile-selected tile' : 'guess-tile tile';
+  const cheat =
+    !cheatMode || !guess
+      ? ''
+      : guess === correct
+      ? 'cheat-correct'
+      : 'cheat-wrong';
   return (
-    <div className='digit'>
-      {selected ? console.log('guess ', guess, 'correct ', correct) : null}
-      <button
-        className={selected ? 'tile-selected' : 'input-box'}
-        onClick={() => handleSelect(id)}
-      >
-        {guess ? guess : ''}
-      </button>
-    </div>
+    <button
+      className={`tile ${select}, ${cheat}`}
+      // className={selected ? 'tile-selected tile' : 'guess-tile tile'}
+      // className={guess === correct ? 'cheat-correct' : 'cheat-wrong'}
+      onClick={() => handleSelect(id)}
+    >
+      {guess ? guess : ''}
+    </button>
   );
 }
